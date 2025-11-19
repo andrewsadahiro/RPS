@@ -17,30 +17,74 @@ The result of the game will be shown on the LCD
 
 
 import time
-import gpiozero as GPIO
 import random
 
-sign = ['Rock', 'Paper', 'Scissors']
+import board
+from adafruit_ads1x15 import ADS1115, AnalogIn, ads1x15
 
+# Create the I2C bus
+i2c = board.I2C()
+# Create the ADC object using the I2C bus
+ads = ADS1115(i2c)
 
+# initialize sign tuple
+sign = ('Rock', 'Paper', 'Scissors')
+
+# countdown timer
 TIMER = 4
 
+DIFFICULTY = 'Easy' #'Easy' or 'Hard' determines algorithm
+
+# initialize list for tracking player input
 input_list = []
 
+# Two flex sensors on A0 and A1
+flex1 = AnalogIn(ads, ads1x15.Pin.A0)
+flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 
+# threshold that determines if sensor if flexed or not
+FLEX_THRESHOLD = 19000 #~20000 -> not flex, 18000 -> flex
+                 
+#is flexed variables |F -> not flex, T -> flexed
+flex1_status = False
+flex2_status = False
+                 
 # uses atleast 2 flex sensors to detect sign held when func called
 # returns a string from sign list
 def get_input():
-    global input_list
-    x = 1 #placeholder
+    global input_list, flex1, flex2, flex1_status, flex2_status
     
-    #use flex sensors to get sign
+    x = random.randint(0,2) #placeholder
+    #plays random if below script doesnt work
+    
+    #print("Flex1:", flex1.value, "Flex2:", flex2.value)
+    
+    if flex1.value >= FLEX_THRESHOLD:
+        flex1_status = True
+    else:
+        flex1_status = False
+        
+    if flex2.value >= FLEX_THRESHOLD:
+        flex2_status = True
+    else:
+        flex2_status = False
+    
     
     
     #if sensor 1 = flex, sensor 2 != flex -> scissor
     #if both = flex -> rock
     # if both != flex -> paper
     
+    if flex1_status != flex2_status:
+        x = 2 #Scissors
+    elif flex1_status == flex2_status:
+        if flex1.value <= FLEX_THRESHOLD:
+            x = 0 #Rock
+        elif flex1.value >= FLEX_THRESHOLD:    
+            x = 1 #Paper
+    
+    
+    #print("Played",sign[x])
     input_list.append(sign[x])
     return sign[x]
 
@@ -73,32 +117,15 @@ wins_against = {
 }
 
 
-def get_winner(opp_move, player_move):
-    
-    #tie
-    if opp_move == player_move:
-        game_conc("Tie")
-    #player lose
-    elif wins_against[opp_move] == player_move:
-        game_conc("Lose")
-    #player win
-    else:
-        game_conc("Win")
-    
-
-# takes in string from get_winner
-# displays win/lost on LCD screen
-# buzzer(?)
-
 
 def game_conc(outcome):
-    print(f"Player played {player_move}, Opponent played {opp_move}")
+    #LCD Placeholder Function
     if outcome == "Tie":
         print("Tie")
     elif outcome == "Win":
-        print("Win")
+        print("You Win")
     elif outcome == "Lose":
-        print("Lose")
+        print("You Lose")
     
 # main game function
 # checks player input after countdown
@@ -110,8 +137,21 @@ def play_game():
         print(timer)
         time.sleep(1)
     #compare input vs AI
-    get_winner(get_opponent('Easy'),get_input())
-
-
+    player_move = get_input()
+    opp_move = get_opponent(DIFFICULTY)
+    
+    print(f"Player played {player_move}, Opponent played {opp_move}")
+    
+    #tie
+    if opp_move == player_move:
+        game_conc("Tie")
+    #player lose
+    elif wins_against[opp_move] == player_move:
+        game_conc("Lose")
+    #player win
+    else:
+        game_conc("Win")
+    
+    
 
 play_game()
