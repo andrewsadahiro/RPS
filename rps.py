@@ -54,10 +54,7 @@ flex2_status = False
 def get_input():
     global input_list, flex1, flex2, flex1_status, flex2_status
     
-    x = random.randint(0,2) #placeholder
-    #plays random if below script doesnt work
-    
-    #print("Flex1:", flex1.value, "Flex2:", flex2.value)
+    x = 0 #placeholder
     
     if flex1.value >= FLEX_THRESHOLD:
         flex1_status = True
@@ -78,13 +75,14 @@ def get_input():
     if flex1_status != flex2_status:
         x = 2 #Scissors
     elif flex1_status == flex2_status:
-        if flex1.value <= FLEX_THRESHOLD:
+        if flex1.value < FLEX_THRESHOLD:
             x = 0 #Rock
         elif flex1.value >= FLEX_THRESHOLD:    
             x = 1 #Paper
     
     
-    #print("Played",sign[x])
+    print("Flex1:", flex1.value, "Flex2:", flex2.value)
+    
     input_list.append(sign[x])
     return sign[x]
 
