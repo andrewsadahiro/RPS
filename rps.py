@@ -13,11 +13,9 @@ The result of the game will be shown on the LCD
 
 """
 
-
-
-
 import time
 import random
+from collections import Counter
 
 import board
 from adafruit_ads1x15 import ADS1115, AnalogIn, ads1x15
@@ -30,10 +28,24 @@ ads = ADS1115(i2c)
 # initialize sign tuple
 sign = ('Rock', 'Paper', 'Scissors')
 
+# matchup dicts
+wins_against = {
+    'Rock': 'Scissors',
+    'Paper': 'Rock',
+    'Scissors': 'Paper'
+}
+
+
+loses_against = {
+    'Rock': 'Paper',
+    'Paper': 'Scissors',
+    'Scissors': 'Rock'
+}
+
 # countdown timer
 TIMER = 4
 
-DIFFICULTY = 'Easy' #'Easy' or 'Hard' determines algorithm
+DIFFICULTY = 'Hard' #'Easy' or 'Hard' determines algorithm
 
 # initialize list for tracking player input
 input_list = []
@@ -53,9 +65,7 @@ flex2_status = False
 # returns a string from sign list
 def get_input():
     global input_list, flex1, flex2, flex1_status, flex2_status
-    
-    x = 0 #placeholder
-    
+       
     if flex1.value >= FLEX_THRESHOLD:
         flex1_status = True
     else:
@@ -74,10 +84,10 @@ def get_input():
     
     if flex1_status != flex2_status:
         x = 2 #Scissors
-    elif flex1_status == flex2_status:
+    else: #flex1_status == flex2_status
         if flex1.value < FLEX_THRESHOLD:
             x = 0 #Rock
-        elif flex1.value >= FLEX_THRESHOLD:    
+        else: #flex1.value >= FLEX_THRESHOLD   
             x = 1 #Paper
     
     
@@ -91,28 +101,30 @@ def get_input():
 # intakes string 'Easy' or 'Hard' to determine how move is chosen
 # returns a string from sign list
 def get_opponent(difficulty):
-    global input_list
+    global input_list, loses_against
     
     if difficulty == 'Easy':
         return sign[random.randint(0,2)]
     
     if difficulty == 'Hard':
-        #insert AI here
-        
         #use input_list to find pattern in player input, try and predict what happens next
-        pass
-    
+
+        c = Counter(input_list)
+        common = c.most_common(1)[0][0] # most common input
+
+        print(input_list)
+        print('Predicted:',common)
+        print('Will PLay:', loses_against[common])
+        
+        c.clear()
+        return loses_against[common]
 
 # determines winner  
 # intakes two strings, opponent's move, and player's move 
 # calls game_conc function after determining winner
-# references dict
+# references wins_against dict
 
-wins_against = {
-    'Rock': 'Scissors',
-    'Paper': 'Rock',
-    'Scissors': 'Paper'
-}
+
 
 
 
@@ -151,5 +163,5 @@ def play_game():
         game_conc("Win")
     
     
-
-play_game()
+while True:
+    play_game()
