@@ -42,13 +42,24 @@ loses_against = {
     'Scissors': 'Rock'
 }
 
+# initialize list for tracking player input
+input_list = []
+
+# score tracking variables
+p_score = 0 #player
+o_score = 0 #opponent
+
+# Toggle debut print statements
+DEBUG = False
+
+
 # countdown timer
 TIMER = 4
+GAME_DELAY = 2 # Delay between games
 
 DIFFICULTY = 'Hard' #'Easy' or 'Hard' determines algorithm
 
-# initialize list for tracking player input
-input_list = []
+
 
 # Two flex sensors on A0 and A1
 flex1 = AnalogIn(ads, ads1x15.Pin.A0)
@@ -64,7 +75,7 @@ flex2_status = False
 # uses atleast 2 flex sensors to detect sign held when func called
 # returns a string from sign list
 def get_input():
-    global input_list, flex1, flex2, flex1_status, flex2_status
+    global input_list, flex1, flex2, flex1_status, flex2_status, DEBUG
        
     if flex1.value >= FLEX_THRESHOLD:
         flex1_status = True
@@ -90,8 +101,8 @@ def get_input():
         else: #flex1.value >= FLEX_THRESHOLD   
             x = 1 #Paper
     
-    
-    print("Flex1:", flex1.value, "Flex2:", flex2.value)
+    if DEBUG:
+        print("Flex1:", flex1.value, "Flex2:", flex2.value)
     
     input_list.append(sign[x])
     return sign[x]
@@ -101,41 +112,41 @@ def get_input():
 # intakes string 'Easy' or 'Hard' to determine how move is chosen
 # returns a string from sign list
 def get_opponent(difficulty):
-    global input_list, loses_against
+    global input_list, loses_against, DEBUG
     
     if difficulty == 'Easy':
         return sign[random.randint(0,2)]
     
     if difficulty == 'Hard':
-        #use input_list to find pattern in player input, try and predict what happens next
+        #use input_list to find pattern in player input, predict what happens next
 
         c = Counter(input_list)
         common = c.most_common(1)[0][0] # most common input
 
-        print(input_list)
-        print('Predicted:',common)
-        print('Will PLay:', loses_against[common])
+        if DEBUG:
+            print('Input List:',input_list)
+            print('Predicted:',common)
+            print('Will PLay:',loses_against[common])
         
         c.clear()
         return loses_against[common]
 
-# determines winner  
-# intakes two strings, opponent's move, and player's move 
-# calls game_conc function after determining winner
-# references wins_against dict
-
-
-
-
-
+# handle game conclusion
+# takes in string (outcome) that tells it what to do
+# keeps track of score
+# does LCD display (WIP)
 def game_conc(outcome):
+    global p_score, o_score
     #LCD Placeholder Function
     if outcome == "Tie":
         print("Tie")
     elif outcome == "Win":
         print("You Win")
+        p_score += 1
     elif outcome == "Lose":
         print("You Lose")
+        o_score += 1
+    print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {o_score}\n')
     
 # main game function
 # checks player input after countdown
@@ -144,7 +155,10 @@ def play_game():
     timer = TIMER
     for i in range(TIMER):
         timer -= 1
-        print(timer)
+        if timer == 0:
+            print('Go!')
+        else:
+            print(timer)
         time.sleep(1)
     #compare input vs AI
     player_move = get_input()
@@ -161,7 +175,14 @@ def play_game():
     #player win
     else:
         game_conc("Win")
+        
+    time.sleep(GAME_DELAY)
+    
+    
     
     
 while True:
-    play_game()
+    try:
+        play_game()
+    except:
+        print("Error")
