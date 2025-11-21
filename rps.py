@@ -6,17 +6,29 @@
 """ECEGR 2000 01 Final Project - Group 4
 Edrich Rabanes, Andrew Sadahiro, Shawna Sanjay
 
-This project uses a single raspberry pi, this code, an ADS1115, and 2 flex sensors (along with a mess of wires) to allow
-someone to play Rock Paper Scissors against a computer, at varying difficulties.
+This project uses a single raspberry pi, this code, an ADS1115, and 2 flex sensors (along with a mess of wires and resistors)
+to allow someone to play Rock Paper Scissors against a computer, at varying difficulties.
 An LCD screen will display a countdown, after which the code will check which sign the player has thrown
 The result of the game will be shown on the LCD
 
 """
 
+"""CONFIG"""
+# Toggle debut print statements
+DEBUG = False
+
+
+TIMER = 4# countdown timer
+GAME_DELAY = 2 # Delay between games
+
+DIFFICULTY = 'Hard' #'Easy' or 'Hard'
+
+
+
+
 import time
 import random
 from collections import Counter
-
 import board
 from adafruit_ads1x15 import ADS1115, AnalogIn, ads1x15
 
@@ -35,7 +47,6 @@ wins_against = {
     'Scissors': 'Paper'
 }
 
-
 loses_against = {
     'Rock': 'Paper',
     'Paper': 'Scissors',
@@ -48,18 +59,6 @@ input_list = []
 # score tracking variables
 p_score = 0 #player
 o_score = 0 #opponent
-
-# Toggle debut print statements
-DEBUG = False
-
-
-# countdown timer
-TIMER = 4
-GAME_DELAY = 2 # Delay between games
-
-DIFFICULTY = 'Hard' #'Easy' or 'Hard' determines algorithm
-
-
 
 # Two flex sensors on A0 and A1
 flex1 = AnalogIn(ads, ads1x15.Pin.A0)
@@ -77,6 +76,7 @@ flex2_status = False
 def get_input():
     global input_list, flex1, flex2, flex1_status, flex2_status, DEBUG
        
+    #determine if sensors are flexed beyond threshold or not
     if flex1.value >= FLEX_THRESHOLD:
         flex1_status = True
     else:
@@ -160,6 +160,7 @@ def play_game():
         else:
             print(timer)
         time.sleep(1)
+        
     #compare input vs AI
     player_move = get_input()
     opp_move = get_opponent(DIFFICULTY)
