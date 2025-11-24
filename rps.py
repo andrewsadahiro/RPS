@@ -1,5 +1,5 @@
 # rps.py
-# Description: RPS vs AI
+# Description: RPS vs Bot
 # Author: Andrew Sadahiro - asadahiro1@seattleu.edu
 
 
@@ -7,23 +7,31 @@
 Edrich Rabanes, Andrew Sadahiro, Shawna Sanjay
 
 This project uses a single raspberry pi, this code, an ADS1115, and 2 flex sensors (along with a mess of wires and resistors)
-to allow someone to play Rock Paper Scissors against a computer, at varying difficulties.
-An LCD screen will display a countdown, after which the code will check which sign the player has thrown
-The result of the game will be shown on the LCD
+to allow someone to play Rock Paper Scissors against a bot, at varying difficulties. An LCD screen will display a countdown,
+after which the code will check which sign the player has thrown. The result of the game will be shown on the LCD.
+
+Simply attach the flex sensors to your fingers (any two fingers that aren't both flexed/not flexed when making a scissors), and throw a sign
+by the time the countdown is done.
+
+Below are the config settings. You can leave them as they are, or modify them to adjust your experience.
 
 """
 
-"""CONFIG"""
-# Toggle debut print statements
+# ===CONFIG===
+
+# Toggle debug print statements
 DEBUG = False
 
+# Countdown Timer
+TIMER = 4
 
-TIMER = 4# countdown timer
-GAME_DELAY = 2 # Delay between games
+# Delay between games
+GAME_DELAY = 2
+
 
 DIFFICULTY = 'Hard' #'Easy' or 'Hard'
 
-
+# ============
 
 
 import time
@@ -31,6 +39,42 @@ import random
 from collections import Counter
 import board
 from adafruit_ads1x15 import ADS1115, AnalogIn, ads1x15
+
+from gpiozero import OutputDevice
+from gpiozero import TonalBuzzer
+
+
+
+# === BUZZER ===
+# Initialize Buzzer
+b = TonalBuzzer(4) #GPIO pin 4
+ # simplified tone function
+def bplay(tone):
+    b.play(tone)
+    time.sleep(0.2)
+    b.stop()
+    
+def win_sfx():
+    bplay("B3") 
+    bplay("A4")
+    
+def lose_sfx():
+    bplay("A4")
+    bplay("B3")
+    
+def tie_sfx():
+    bplay("E4")
+
+# ==============
+
+
+
+
+
+
+
+
+
 
 # Create the I2C bus
 i2c = board.I2C()
@@ -58,7 +102,7 @@ input_list = []
 
 # score tracking variables
 p_score = 0 #player
-o_score = 0 #opponent
+b_score = 0 #bot
 
 # Two flex sensors on A0 and A1
 flex1 = AnalogIn(ads, ads1x15.Pin.A0)
@@ -67,7 +111,7 @@ flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 # threshold that determines if sensor if flexed or not
 FLEX_THRESHOLD = 19000 #~20000 -> not flex, 18000 -> flex
                  
-#is flexed variables |F -> not flex, T -> flexed
+#is flexed variables - False -> not flex, True -> flexed
 flex1_status = False
 flex2_status = False
                  
@@ -89,7 +133,7 @@ def get_input():
     
     
     
-    #if sensor 1 = flex, sensor 2 != flex -> scissor
+    #if sensor 1 != sensor 2 -> scissor
     #if both = flex -> rock
     # if both != flex -> paper
     
@@ -108,10 +152,11 @@ def get_input():
     return sign[x]
 
 
-# gets the opponent's move
+
+# gets the bot's move
 # intakes string 'Easy' or 'Hard' to determine how move is chosen
 # returns a string from sign list
-def get_opponent(difficulty):
+def get_bot(difficulty):
     global input_list, loses_against, DEBUG
     
     if difficulty == 'Easy':
@@ -136,17 +181,20 @@ def get_opponent(difficulty):
 # keeps track of score
 # does LCD display (WIP)
 def game_conc(outcome):
-    global p_score, o_score
+    global p_score, b_score
     #LCD Placeholder Function
     if outcome == "Tie":
         print("Tie")
+        tie_sfx()
     elif outcome == "Win":
         print("You Win")
         p_score += 1
+        win_sfx()
     elif outcome == "Lose":
         print("You Lose")
-        o_score += 1
-    print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {o_score}\n')
+        b_score += 1
+        lose_sfx()
+    print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {b_score}\n')
     
 # main game function
 # checks player input after countdown
@@ -163,15 +211,15 @@ def play_game():
         
     #compare input vs AI
     player_move = get_input()
-    opp_move = get_opponent(DIFFICULTY)
+    bot_move = get_bot(DIFFICULTY)
     
-    print(f"Player played {player_move}, Opponent played {opp_move}")
+    print(f"Player played {player_move}, Bot played {bot_move}")
     
     #tie
-    if opp_move == player_move:
+    if bot_move == player_move:
         game_conc("Tie")
     #player lose
-    elif wins_against[opp_move] == player_move:
+    elif wins_against[bot_move] == player_move:
         game_conc("Lose")
     #player win
     else:
