@@ -25,3 +25,44 @@ def lcd_init():
     lcd_byte(0x06, LCD_CMD)
     lcd_byte(0x01, LCD_CMD)
     sleep(E_DELAY)
+    
+def lcd_byte(bits, mode):
+    LCD_RS.value = mode
+    
+    LCD_D4.off()
+    LCD_D5.off()
+    LCD_D6.off()
+    LCD_D7.off()
+    
+    if bits and 0x10:
+        LCD_D4.on()
+    if bits and 0x20:
+        LCD_D5.on()
+    if bits and 0x40:
+        LCD_D6.on()
+    if bits and 0x80:
+        LCD_D7.on()
+        
+    led_toggle_enable()
+    
+def lcd_toggle_enable():
+    sleep(E_DELAY)
+    LCD_E.on()
+    sleep(E_PULSE)
+    LCD_E.off()
+    sleep(E_DELAY)
+    
+def lcd_string(message, line):
+    message = message.ljust(LDC_WIDTH, " ")
+    
+    lcd_byte(line, LCD_CMD)
+    
+    for i in range(LCD_WIDTH):
+        lcd_byte(ord(message[i]), LCD_CHR)
+        
+if __name__ == '__main__':
+    lcd_init()
+    lcd_string("HI", LCD_LINE_1)
+    lcd_string("MEOWW", LCD_LINE_2)
+    sleep(3)
+    
