@@ -28,21 +28,19 @@ def lcd_init():
     
 def lcd_byte(bits, mode):
     LCD_RS.value = mode
-    
-    LCD_D4.off()
-    LCD_D5.off()
-    LCD_D6.off()
-    LCD_D7.off()
-    
-    if bits and 0x10:
-        LCD_D4.on()
-    if bits and 0x20:
-        LCD_D5.on()
-    if bits and 0x40:
-        LCD_D6.on()
-    if bits and 0x80:
-        LCD_D7.on()
-        
+
+    # HIGH nibble
+    LCD_D4.value = 1 if bits & 0x10 else 0
+    LCD_D5.value = 1 if bits & 0x20 else 0
+    LCD_D6.value = 1 if bits & 0x40 else 0
+    LCD_D7.value = 1 if bits & 0x80 else 0
+    lcd_toggle_enable()
+
+    # LOW nibble
+    LCD_D4.value = 1 if bits & 0x01 else 0
+    LCD_D5.value = 1 if bits & 0x02 else 0
+    LCD_D6.value = 1 if bits & 0x04 else 0
+    LCD_D7.value = 1 if bits & 0x08 else 0
     lcd_toggle_enable()
     
 def lcd_toggle_enable():
@@ -60,9 +58,8 @@ def lcd_string(message, line):
     for i in range(LCD_WIDTH):
         lcd_byte(ord(message[i]), LCD_CHR)
         
-if __name__ == '__main__':
-    lcd_init()
-    lcd_string("HI", LCD_LINE_1)
-    lcd_string("MEOWW", LCD_LINE_2)
-    sleep(3)
+lcd_init()
+lcd_string("HI", LCD_LINE_1)
+lcd_string("MEOWW", LCD_LINE_2)
+
     
