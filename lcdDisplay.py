@@ -43,7 +43,7 @@ def lcd_byte(bits, mode):
     if bits and 0x80:
         LCD_D7.on()
         
-    led_toggle_enable()
+    lcd_toggle_enable()
     
 def lcd_toggle_enable():
     sleep(E_DELAY)
@@ -53,7 +53,7 @@ def lcd_toggle_enable():
     sleep(E_DELAY)
     
 def lcd_string(message, line):
-    message = message.ljust(LDC_WIDTH, " ")
+    message = message.ljust(LCD_WIDTH, " ")
     
     lcd_byte(line, LCD_CMD)
     
