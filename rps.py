@@ -93,7 +93,7 @@ def lcd_init():
     lcd_byte(0x0C, LCD_CMD)
     lcd_byte(0x06, LCD_CMD)
     lcd_byte(0x01, LCD_CMD)
-    sleep(E_DELAY)
+    time.sleep(E_DELAY)
     
 def lcd_byte(bits, mode):
     LCD_RS.value = mode
@@ -113,11 +113,11 @@ def lcd_byte(bits, mode):
     lcd_toggle_enable()
     
 def lcd_toggle_enable():
-    sleep(E_DELAY)
+    time.sleep(E_DELAY)
     LCD_E.on()
-    sleep(E_PULSE)
+    time.sleep(E_PULSE)
     LCD_E.off()
-    sleep(E_DELAY)
+    time.sleep(E_DELAY)
     
 def lcd_string(message, line):
     message = message.ljust(LCD_WIDTH, " ")
