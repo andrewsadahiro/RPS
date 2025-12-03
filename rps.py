@@ -14,6 +14,7 @@ Simply attach the flex sensors to your fingers (any two fingers that aren't both
 by the time the countdown is done.
 
 Below are the config settings. You can leave them as they are, or modify them to adjust your experience.
+use rps_callibration.py to callibrate if its consistently misreading inputs
 
 """
 
@@ -23,7 +24,7 @@ Below are the config settings. You can leave them as they are, or modify them to
 DEBUG = True
 
 # Toggle Sound
-SOUND = True
+SOUND = False
 
 # Countdown Timer
 TIMER = 4
@@ -33,6 +34,10 @@ GAME_DELAY = 2
 
 
 DIFFICULTY = 'Hard' #'Easy' or 'Hard'
+
+# use rps_callibration.py to get these
+FLEX_VAL = 24598
+UNFLEX_VAL = 21948
 
 # ============
 
@@ -171,8 +176,8 @@ flex1 = AnalogIn(ads, ads1x15.Pin.A0)
 flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 
 # threshold that determines if sensor if flexed or not
-FLEX_THRESHOLD = 21000 #FIX THIS
-                 
+FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)
+
 #is flexed variables - False -> not flex, True -> flexed
 flex1_status = False
 flex2_status = False
@@ -183,16 +188,15 @@ def get_input():
     global input_list, flex1, flex2, flex1_status, flex2_status, DEBUG
        
     #determine if sensors are flexed beyond threshold or not
-    if flex1.value <= FLEX_THRESHOLD:
+    if (abs(flex1.value - FLEX_VAL))<=FLEX_DIFF:
         flex1_status = True
     else:
         flex1_status = False
         
-    if flex2.value <= FLEX_THRESHOLD:
+    if (abs(flex2.value - FLEX_VAL))<=FLEX_DIFF:
         flex2_status = True
     else:
         flex2_status = False
-    
     
     
     #if sensor 1 != sensor 2 -> scissor
@@ -202,7 +206,7 @@ def get_input():
     if flex1_status != flex2_status:
         x = 2 #Scissors
     else: #flex1_status == flex2_status
-        if flex1.value > FLEX_THRESHOLD:
+        if (abs(flex1.value - FLEX_VAL))<=FLEX_DIFF:
             x = 0 #Rock
         else: #flex1.value >= FLEX_THRESHOLD   
             x = 1 #Paper
