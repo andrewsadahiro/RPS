@@ -1,14 +1,17 @@
 # rps.py
 # Description: RPS vs Bot
-# Author: Andrew Sadahiro - asadahiro1@seattleu.edu
-
+# Authors:
+#   Andrew Sadahiro - asadahiro1@seattleu.edu
+#   Edrich Rabanes - erabanes@seattleu.edu
+#   Shawna Sanjay - ssanjay2@seattleu.edu
 
 """ECEGR 2000 01 Final Project - Group 4
-Edrich Rabanes, Andrew Sadahiro, Shawna Sanjay
+Andrew Sadahiro, Edrich Rabanes, Shawna Sanjay
 
 This project uses a single raspberry pi, this code, an ADS1115, and 2 flex sensors (along with a mess of wires and resistors)
 to allow someone to play Rock Paper Scissors against a bot, at varying difficulties. An LCD screen will display a countdown,
-after which the code will check which sign the player has thrown. The result of the game will be shown on the LCD.
+after which the code will check which sign the player has thrown. The result of the game will be shown on the LCD. A buzzer will
+also make corresponding beeps, based on the outcome, and for the countdown before the game.
 
 Simply attach the flex sensors to your fingers (any two fingers that aren't both flexed/not flexed when making a scissors), and throw a sign
 by the time the countdown is done.
@@ -50,34 +53,55 @@ from adafruit_ads1x15 import ADS1115, AnalogIn, ads1x15
 
 from gpiozero import OutputDevice
 from gpiozero import TonalBuzzer
+from gpiozero.tones import Tone
 
 
 
 # === BUZZER ===
+# By Shawna
 # Initialize Buzzer
-b = TonalBuzzer(4) #GPIO pin 4
- # simplified tone function
-def bplay(tone):
-    b.play(tone)
-    time.sleep(0.2)
-    b.stop()
+tb = TonalBuzzer(4)
+
+tA3 = Tone(note= "A3")
+tA4 = Tone(note= "A#4")
+tA5 = Tone(note= "A5")
+tC4 = Tone(note= "C4")
+tC5 = Tone(note= "C5")
+tE4 = Tone(note= "E4")
+tF4 = Tone(note= "F4")
+
+def lose_sfx():
+    tb.play(tC4)
+    time.sleep(0.1)
+    tb.play(tF4)
+    time.sleep(0.5)
+    tb.play(tF4)
+    time.sleep(0.5)
+    tb.stop()
     
 def win_sfx():
-    bplay("B3") 
-    bplay("A4")
-    
-def lose_sfx():
-    bplay("A4")
-    bplay("B3")
+    tb.play(tA3)
+    time.sleep(0.1)
+    tb.play(tC5)
+    time.sleep(0.1)
+    tb.play(tC5)
+    time.sleep(0.3)
+    tb.play(tA4)
+    time.sleep(0.5)
+    tb.play(tA3)
+    tb.stop()
     
 def tie_sfx():
-    bplay("E4")
+    tb.play(tE4)
+    time.sleep(0.5)
+    tb.stop()
 
 # ==============
 
 
 
 # === LCD ===
+# By Edrich
 LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
@@ -248,7 +272,6 @@ def get_bot(difficulty):
 # does LCD display (WIP)
 def game_conc(outcome):
     global p_score, b_score
-    #LCD Placeholder Function
     if outcome == "Tie":
         print("Tie")
         if SOUND:
@@ -261,14 +284,14 @@ def game_conc(outcome):
         if SOUND:
             win_sfx()
         lcd_string("      YOU", LCD_LINE_1)
-        lcd_string("      WIN", LCD_LINE_2)
+        lcd_string("      WIN   :D", LCD_LINE_2)
     elif outcome == "Lose":
         print("You Lose")
         b_score += 1
         if SOUND:
             lose_sfx()
         lcd_string("      YOU", LCD_LINE_1)
-        lcd_string("      LOSE", LCD_LINE_2)
+        lcd_string("      LOSE   :(", LCD_LINE_2)
     print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {b_score}\n')
     
 # main game function
@@ -280,11 +303,19 @@ def play_game():
         timer -= 1
         if timer == 0:
             if SOUND:
-                print() #TODO
+                tb.play(tC5)
+                time.sleep(0.1)
+                tb.stop()
+            lcd_string("       GO!", LCD_LINE_1)
+            lcd_string("", LCD_LINE_2)
             print('Go!')
         else:
             if SOUND:
-                print() #TODO
+                tb.play(tE4)
+                time.sleep(0.1)
+                tb.stop()
+            lcd_string(f"       {timer}", LCD_LINE_1)
+            lcd_string("", LCD_LINE_2)
             print(timer)
         time.sleep(1)
         
@@ -293,6 +324,9 @@ def play_game():
     bot_move = get_bot(DIFFICULTY)
     
     print(f"Player played {player_move}, Bot played {bot_move}")
+    lcd_string(f"     {player_move} vs", LCD_LINE_1)
+    lcd_string(f"      {bot_move}", LCD_LINE_2)
+    time.sleep(1)
     
     #tie
     if bot_move == player_move:
@@ -308,9 +342,13 @@ def play_game():
     
     
     
-    
-while True:
+x = 1
+while x == 1:
     try:
         play_game()
     except:
         print("Error")
+        
+        
+        
+
