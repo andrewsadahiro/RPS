@@ -74,8 +74,8 @@ LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
 LCD_D5 = OutputDevice(18)
-LCD_D6 = OutputDevice(15)
-LCD_D7 = OutputDevice(14)
+LCD_D6 = OutputDevice(27)
+LCD_D7 = OutputDevice(17)
 
 LCD_WIDTH = 16
 LCD_CHR = True
@@ -258,7 +258,7 @@ def game_conc(outcome):
         b_score += 1
         lose_sfx()
         lcd_string("      YOU", LCD_LINE_1)
-        lcd_string("      LOSe", LCD_LINE_2)
+        lcd_string("      LOSE", LCD_LINE_2)
     print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {b_score}\n')
     
 # main game function
