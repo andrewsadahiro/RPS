@@ -15,6 +15,15 @@ flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 unflex_ave = []
 flex_ave = []
 
+
+
+"""
+This is a file to calibrate the flex sensors for the main rps.py
+To use, set up your hardware, and run the callibrate function. Follow the instructions, and then write down the values it
+spits out at the end, and put them in for the constants in the test function. Then you can run the test function as needed
+to make sure it says True when the sensor is flexed, and False when its not.
+"""
+
 def callibrate():
     print("DO NOT FLEX SENSORS")
     for i in range(10):
@@ -45,24 +54,24 @@ def callibrate():
     FLEX_VAL = flex_ave_val
     UNFLEX_VAL = unflex_ave_val
 
+def test():
+    FLEX_VAL = 24598
+    UNFLEX_VAL = 21948
 
-FLEX_VAL = 24598
-UNFLEX_VAL = 21948
+    FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)
 
-FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)
+    print(FLEX_DIFF)
 
-print(FLEX_DIFF)
+    print("flex val")
+    print(flex2.value)
 
-print("flex val")
-print(flex2.value)
-
-print("flex dif")
-print(abs(flex2.value - UNFLEX_VAL))
+    print("flex dif")
+    print(abs(flex2.value - UNFLEX_VAL))
 
 
-if (abs(flex2.value - FLEX_VAL))<=FLEX_DIFF:
-    flex2_status = True
-else:
-    flex2_status = False
+    if (abs(flex2.value - FLEX_VAL))<=FLEX_DIFF:
+        flex2_status = True
+    else:
+        flex2_status = False
 
-print(flex2_status)
+    print(flex2_status)
