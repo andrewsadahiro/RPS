@@ -20,7 +20,10 @@ Below are the config settings. You can leave them as they are, or modify them to
 # ===CONFIG===
 
 # Toggle debug print statements
-DEBUG = False
+DEBUG = True
+
+# Toggle Sound
+SOUND = True
 
 # Countdown Timer
 TIMER = 4
@@ -168,7 +171,7 @@ flex1 = AnalogIn(ads, ads1x15.Pin.A0)
 flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 
 # threshold that determines if sensor if flexed or not
-FLEX_THRESHOLD = 19000 #~20000 -> not flex, 18000 -> flex
+FLEX_THRESHOLD = 21000 #FIX THIS
                  
 #is flexed variables - False -> not flex, True -> flexed
 flex1_status = False
@@ -180,12 +183,12 @@ def get_input():
     global input_list, flex1, flex2, flex1_status, flex2_status, DEBUG
        
     #determine if sensors are flexed beyond threshold or not
-    if flex1.value >= FLEX_THRESHOLD:
+    if flex1.value <= FLEX_THRESHOLD:
         flex1_status = True
     else:
         flex1_status = False
         
-    if flex2.value >= FLEX_THRESHOLD:
+    if flex2.value <= FLEX_THRESHOLD:
         flex2_status = True
     else:
         flex2_status = False
@@ -199,7 +202,7 @@ def get_input():
     if flex1_status != flex2_status:
         x = 2 #Scissors
     else: #flex1_status == flex2_status
-        if flex1.value < FLEX_THRESHOLD:
+        if flex1.value > FLEX_THRESHOLD:
             x = 0 #Rock
         else: #flex1.value >= FLEX_THRESHOLD   
             x = 1 #Paper
@@ -244,19 +247,22 @@ def game_conc(outcome):
     #LCD Placeholder Function
     if outcome == "Tie":
         print("Tie")
-        tie_sfx()
+        if SOUND:
+            tie_sfx()
         lcd_string("   ITS A", LCD_LINE_1)
         lcd_string("    TIE", LCD_LINE_2)
     elif outcome == "Win":
         print("You Win")
         p_score += 1
-        win_sfx()
+        if SOUND:
+            win_sfx()
         lcd_string("      YOU", LCD_LINE_1)
         lcd_string("      WIN", LCD_LINE_2)
     elif outcome == "Lose":
         print("You Lose")
         b_score += 1
-        lose_sfx()
+        if SOUND:
+            lose_sfx()
         lcd_string("      YOU", LCD_LINE_1)
         lcd_string("      LOSE", LCD_LINE_2)
     print(f'\n    ==Score Board==\nPlayer = {p_score} | Computer = {b_score}\n')
@@ -269,8 +275,12 @@ def play_game():
     for i in range(TIMER):
         timer -= 1
         if timer == 0:
+            if SOUND:
+                print() #TODO
             print('Go!')
         else:
+            if SOUND:
+                print() #TODO
             print(timer)
         time.sleep(1)
         
