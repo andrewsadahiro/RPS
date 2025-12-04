@@ -58,7 +58,6 @@ from gpiozero.tones import Tone
 
 
 # === BUZZER ===
-# By Shawna
 # Initialize Buzzer
 tb = TonalBuzzer(4)
 
@@ -101,7 +100,6 @@ def tie_sfx():
 
 
 # === LCD ===
-# By Edrich
 LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
@@ -351,4 +349,5 @@ while x == 1:
         
         
         
+
 
