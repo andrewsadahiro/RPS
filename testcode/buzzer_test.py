@@ -1,6 +1,5 @@
 #buzzer_test.py
 #Description: Creating the sound for winning and losing
-#Author: Shawna Sanjay - ssanjay2@seattleu.edu
 
 import RPi.GPIO as GPIO
 from time import sleep
