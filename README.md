@@ -26,6 +26,7 @@ You can also use a potentiometer on the LCD's pin V0 to control the brightness
 # Materials
 Below are the components used in the project, along with brief descriptions.
 ![](images/ADS1115.png)
+The ADS1115
 
 ![](images/Buzzer.png)
 
