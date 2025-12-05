@@ -53,3 +53,7 @@ The flex sensors are the main input, detecting what sign the player throws
 ![](images/potentiometer.png)
 
 The potentiometer is used to adjust the LCD's brightness
+
+![](images/LCD.png)
+
+![](images/raspberrypi.png)
