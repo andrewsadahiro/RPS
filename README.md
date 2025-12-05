@@ -6,7 +6,7 @@ The purpose of this project is to be able to play Rock Paper Scissors with a bot
 
 # Software
 Below is a flowchart showing the general steps the code goes through as it runs.
-![](images/Flowchart.png)
+![Flowchart](images/Flowchart.png)
 
 The process starts once the rps.py file is run. It displays a short (configurable) countdown on the LCD screen, as well as the code terminal, beeping each second of the countdown. During the last second, it will say "Go!" and beep at a different tone.
 
@@ -30,8 +30,8 @@ pip install gpiozero
 
 # Hardware
 Below are a few diagrams showing how each component is connected. 
-![](images/Diagram_1.png)
-![](images/LCD_Circuit.png)
+![Wiring Diagram](images/Diagram_1.png)
+![LCD Wiring Diagram](images/LCD_Circuit.png)
 
 Make sure all the grounds are shared, and that the LCD is connected to 5V, while everything else is connected to 3.3V.
 You can also use a potentiometer on the LCD's pin V0 to control the brightness
