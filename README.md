@@ -34,8 +34,9 @@ The buzzer is used as a countdown to signal the player when to show their handsi
 
 ![](images/sensor.png)
 
+The flex sensors are the main input, detecting what sign the player throws
+
 
 ![](images/potentiometer.png)
 
-
-
+The potentiometer is used to adjust the LCD's brightness
