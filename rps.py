@@ -45,6 +45,9 @@ UNFLEX_VAL = 22000
 # ============
 
 
+
+
+
 import time
 import random
 from collections import Counter
@@ -58,7 +61,6 @@ from gpiozero.tones import Tone
 
 
 # === BUZZER ===
-# By Shawna
 # Initialize Buzzer
 tb = TonalBuzzer(4)
 
@@ -95,13 +97,12 @@ def tie_sfx():
     tb.play(tE4)
     time.sleep(0.5)
     tb.stop()
+    
 
-# ==============
 
 
 
 # === LCD ===
-# By Edrich
 LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
@@ -160,7 +161,6 @@ def lcd_string(message, line):
         lcd_byte(ord(message[i]), LCD_CHR)
         
 lcd_init()
-# ===========
 
 
 
@@ -199,13 +199,14 @@ b_score = 0 #bot
 flex1 = AnalogIn(ads, ads1x15.Pin.A0)
 flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 
-# threshold that determines if sensor if flexed or not
-FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)-1000
-
 #is flexed variables - False -> not flex, True -> flexed
 flex1_status = False
 flex2_status = False
                  
+# flex threshold
+
+FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)-1000
+
 # uses atleast 2 flex sensors to detect sign held when func called
 # returns a string from sign list
 def get_input():
@@ -265,6 +266,8 @@ def get_bot(difficulty):
         
         c.clear()
         return loses_against[common]
+
+
 
 # handle game conclusion
 # takes in string (outcome) that tells it what to do
