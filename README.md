@@ -32,5 +32,5 @@ The ADS1115 is used to interpret the analog measurements from the flex sensor an
 
 The buzzer is used as a countdown to signal the player when to show their handsign and plays a noise that notifies if the player wins, loses, or ties.
 
-![](images/2 pin flex sensor.png)
+![](images/sensor.png)
 
