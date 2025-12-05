@@ -29,5 +29,8 @@ Below are the components used in the project, along with brief descriptions.
 The ADS1115 is used to interpret the analog measurements from the flex sensor and send that data to the Raspberry PI
 
 ![](images/Buzzer.png)
+
 The buzzer is used as a countdown to signal the player when to show their handsign and plays a noise that notifies if the player wins, loses, or ties.
+
+![](images/2 pin flex sensor.png)
 
