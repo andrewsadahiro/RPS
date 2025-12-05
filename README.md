@@ -14,6 +14,15 @@ The code will read the player's input via the flex sensors, and determine what s
 
 The two inputs are then compared, and a winner is determined, following Rock Paper Scissors logic. The LCD will also display the inputs, as {player input} vs {bot input}. The LCD will then tell you if you won, lost, or tied with the bot, making a different sound for each outcome. After a short (configurable) countdown, it will start the next round.
 
+Necessary Libraries:
+-	adafruit-ads1x15, ADS1115, AnalogIn, etc.
+-	board
+-	gpiozero (Output Device, Tonal Buzzer, Tone)
+To install:
+	pip install adafruit-circuitpython-ads1x15
+	pip install adafruit-blinka
+	pip install gpiozero
+
 
 # Hardware
 Below are a few diagrams showing how each component is connected. 
