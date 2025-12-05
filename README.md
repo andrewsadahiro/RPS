@@ -20,9 +20,12 @@ Necessary Libraries:
 -	gpiozero (Output Device, Tonal Buzzer, Tone)
   
 To install:
-	pip install adafruit-circuitpython-ads1x15
-	pip install adafruit-blinka
-	pip install gpiozero
+
+pip install adafruit-circuitpython-ads1x15
+
+pip install adafruit-blinka
+
+pip install gpiozero
 
 
 # Hardware
