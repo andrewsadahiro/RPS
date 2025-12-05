@@ -1,6 +1,7 @@
 from gpiozero import OutputDevice
 from time import sleep
 
+# Sets output pins for thr LCD Display
 LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
@@ -17,6 +18,7 @@ LCD_LINE_2 = 0xC0
 E_PULSE = 0.0005
 E_DELAY = 0.0005
 
+# Initializes 
 def lcd_init():
     lcd_byte(0x33, LCD_CMD)
     lcd_byte(0x32, LCD_CMD)
@@ -49,7 +51,8 @@ def lcd_toggle_enable():
     sleep(E_PULSE)
     LCD_E.off()
     sleep(E_DELAY)
-    
+
+# Displays user input on the LCD screen
 def lcd_string(message, line):
     message = message.ljust(LCD_WIDTH, " ")
     
@@ -63,3 +66,4 @@ lcd_string("HI", LCD_LINE_1)
 lcd_string("MEOWW", LCD_LINE_2)
 
     
+
