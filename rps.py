@@ -279,8 +279,8 @@ def game_conc(outcome):
         print("Tie")
         if SOUND:
             tie_sfx()
-        lcd_string("   ITS A", LCD_LINE_1)
-        lcd_string("    TIE", LCD_LINE_2)
+        lcd_string("     ITS A", LCD_LINE_1)
+        lcd_string("      TIE", LCD_LINE_2)
     elif outcome == "Win":
         print("You Win")
         p_score += 1
@@ -354,4 +354,5 @@ while x == 1:
         
         
         
+
 
