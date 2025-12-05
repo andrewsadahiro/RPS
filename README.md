@@ -22,3 +22,12 @@ Below are a few diagrams showing how each component is connected.
 
 Make sure all the grounds are shared, and that the LCD is connected to 5V, while everything else is connected to 3.3V.
 You can also use a potentiometer on the LCD's pin V0 to control the brightness
+
+# Materials
+Below are the components used in the project, along with brief descriptions.
+![](images/ADS1115.png)
+
+![](images/Buzzer.png)
+
+
+
