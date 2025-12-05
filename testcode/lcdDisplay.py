@@ -18,7 +18,7 @@ LCD_LINE_2 = 0xC0
 E_PULSE = 0.0005
 E_DELAY = 0.0005
 
-# Initializes 
+# Initializes LCD
 def lcd_init():
     lcd_byte(0x33, LCD_CMD)
     lcd_byte(0x32, LCD_CMD)
@@ -52,18 +52,20 @@ def lcd_toggle_enable():
     LCD_E.off()
     sleep(E_DELAY)
 
-# Displays user input on the LCD screen
-def lcd_string(message, line):
+# Displays string on LCD Screen
+def lcd_string(message, line): message = string you want displayed, line = the line on the display you want the string to be displayed on
     message = message.ljust(LCD_WIDTH, " ")
     
     lcd_byte(line, LCD_CMD)
     
     for i in range(LCD_WIDTH):
         lcd_byte(ord(message[i]), LCD_CHR)
-        
+
+#Testing
 lcd_init()
-lcd_string("HI", LCD_LINE_1)
-lcd_string("MEOWW", LCD_LINE_2)
+lcd_string("HI", LCD_LINE_1) #Displays "HI" on line 1 
+lcd_string("MEOWW", LCD_LINE_2) #Displays "MEOWW" on line 2
 
     
+
 
