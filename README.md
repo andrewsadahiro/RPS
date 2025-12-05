@@ -34,3 +34,8 @@ The buzzer is used as a countdown to signal the player when to show their handsi
 
 ![](images/sensor.png)
 
+
+![](images/potentiometer.png)
+
+
+
