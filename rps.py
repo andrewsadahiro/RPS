@@ -327,8 +327,8 @@ def play_game():
     bot_move = get_bot(DIFFICULTY)
     
     print(f"Player played {player_move}, Bot played {bot_move}")
-    lcd_string(f"     {player_move} vs", LCD_LINE_1)
-    lcd_string(f"      {bot_move}", LCD_LINE_2)
+    lcd_string(f"    {player_move} vs", LCD_LINE_1)
+    lcd_string(f"     {bot_move}", LCD_LINE_2)
     time.sleep(1)
     
     #tie
@@ -354,5 +354,6 @@ while x == 1:
         
         
         
+
 
 
