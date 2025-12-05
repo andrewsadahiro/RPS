@@ -29,10 +29,10 @@ DEBUG = True
 # Toggle Sound
 SOUND = False
 
-# Countdown Timer
+# Countdown Timer (seconds)
 TIMER = 4
 
-# Delay between games
+# Delay between games (seconds)
 GAME_DELAY = 2
 
 
@@ -58,6 +58,7 @@ from gpiozero.tones import Tone
 
 
 # === BUZZER ===
+# By Shawna
 # Initialize Buzzer
 tb = TonalBuzzer(4)
 
@@ -100,6 +101,7 @@ def tie_sfx():
 
 
 # === LCD ===
+# By Edrich
 LCD_RS = OutputDevice(25)
 LCD_E = OutputDevice(24)
 LCD_D4 = OutputDevice(23)
@@ -344,10 +346,9 @@ x = 1
 while x == 1:
     try:
         play_game()
-    except:
-        print("Error")
+    except Exception as e:
+        print(f"Error: {e}")
         
         
         
-
 
