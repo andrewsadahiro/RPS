@@ -31,6 +31,7 @@ pip install gpiozero
 # Hardware
 Below are a few diagrams showing how each component is connected. 
 ![Wiring Diagram](images/Diagram_1.png)
+
   The resistors on the flex sensor are 300 ohms
 ![LCD Wiring Diagram](images/LCD_Circuit.png)
 
