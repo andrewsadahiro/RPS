@@ -57,3 +57,5 @@ The potentiometer is used to adjust the LCD's brightness
 ![](images/LCD.png)
 
 ![](images/raspberrypi.png)
+
+![](images/Glove.webp)
