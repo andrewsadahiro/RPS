@@ -47,7 +47,11 @@ The buzzer is used as a countdown to signal the player when to show their handsi
 
 ![](images/sensor.png)
 
-The flex sensors are the main input, detecting what sign the player throws
+![](images/Glove.jpg)
+
+
+The flex sensors are the main input, detecting what sign the player throws.
+You can attach them to a glove to make swapping players easier
 
 
 ![](images/potentiometer.png)
@@ -56,6 +60,8 @@ The potentiometer is used to adjust the LCD's brightness
 
 ![](images/LCD.png)
 
+The 16x2 LCD (Liquid Crystal Display) is used to display several things, such as the main countdown, the inputs, and the winner
+
 ![](images/raspberrypi.png)
 
-![](images/Glove.webp)
+The Raspberry Pi 5 is the main brains of the project, running the code, reading input from the sensors, and telling the LCD and buzzer how and when to activate
