@@ -27,7 +27,7 @@ use rps_callibration.py to callibrate if its consistently misreading inputs
 DEBUG = True
 
 # Toggle Sound
-SOUND = False
+SOUND = True
 
 # Countdown Timer (seconds)
 TIMER = 4
@@ -39,8 +39,8 @@ GAME_DELAY = 2
 DIFFICULTY = 'Hard' #'Easy' or 'Hard'
 
 # use rps_callibration.py to get these
-FLEX_VAL = 24598
-UNFLEX_VAL = 21948
+FLEX_VAL = 24800
+UNFLEX_VAL = 22000
 
 # ============
 
@@ -200,7 +200,7 @@ flex1 = AnalogIn(ads, ads1x15.Pin.A0)
 flex2 = AnalogIn(ads, ads1x15.Pin.A1)
 
 # threshold that determines if sensor if flexed or not
-FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)
+FLEX_DIFF = abs(FLEX_VAL - UNFLEX_VAL)-1000
 
 #is flexed variables - False -> not flex, True -> flexed
 flex1_status = False
@@ -261,7 +261,7 @@ def get_bot(difficulty):
         if DEBUG:
             print('Input List:',input_list)
             print('Predicted:',common)
-            print('Will PLay:',loses_against[common])
+            print('Will Play:',loses_against[common])
         
         c.clear()
         return loses_against[common]
