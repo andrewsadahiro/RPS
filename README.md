@@ -18,6 +18,7 @@ Necessary Libraries:
 -	adafruit-ads1x15, ADS1115, AnalogIn, etc.
 -	board
 -	gpiozero (Output Device, Tonal Buzzer, Tone)
+  
 To install:
 	pip install adafruit-circuitpython-ads1x15
 	pip install adafruit-blinka
